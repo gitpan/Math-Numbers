@@ -1,0 +1,7 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Math-Numbers.t
+lib/Math/Numbers.pm
+META.yml                                 Module meta-data (added by MakeMaker)
