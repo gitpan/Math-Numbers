@@ -27,12 +27,13 @@ Math::Numbers - Methods for mathematical approaches of concepts of the number th
 
 Math::Numbers is quite a simple module on matters of programming. What
 it's interesting is the focus and approach it is intended to be made from
-the Number Theory basis.
+the Number Theory basis for Perl beginners (like me) and also for young
+mathematicians (like me).
 
 The normal topics of Number Theory include divisibility, prime numbers
-(which is separately intended to be covered by Math::Primes),
+(which is separately intended to be covered by L<Math::Primes>),
 congruences, quadratic residues, approximation for Real numbers,
-diophantine equations, etc and all this is intended to be convered by the
+diophantine equations, etc. and all this is intended to be convered by the
 module on the concept on getting and setting values and also retriving
 the proof methods.
 
@@ -40,17 +41,26 @@ the proof methods.
 
 =cut
 
+require 5;
 package Math::Numbers;
 
 use strict;
 use warnings;
 use List::Util qw(max);
 
-our $VERSION = '0.0000000001';
+our $VERSION = '0.000000001';
 
-=head2 C<new($a, $b, ..., $n);>
-Create a Math::Numbers object. Note that some of the methods will require
+=head2 new
+
+  # Some methods require more than only one argument.
+  my $numbers = Math::Numbers->new($p, $q, ...);
+
+  # Some methods require only one.
+  my $number = Math::Numbers->new($p);
+
+Create a L<Math::Numbers> object. Note that some of the methods will require
 objects created with only one or a defined numbers of arguments.
+
 =cut
 
 sub new {
@@ -63,13 +73,18 @@ sub new {
 	}, $class;
 }
 
-=head2 C<gcd($a, $b [, ..., $n])>
+=head2 gcd
+
+	my $gcd = $numbers->gcd;
+
 Calculation of the Greatest Common Divisor. This is made by two different
 methods which are described below: Bluto's algorithm and Euclidean
 algorithm: The former is used when computing GCD for more than two
 integers; the latter is used when getting the GCD for two numbers to
 improve speed. See below for information on each.
+
 =cut
+
 sub gcd {
 	my($self, @args) = @_;
 	my @numbers = sort {$a < $b} @{$self->{'numbers'}};
@@ -83,13 +98,16 @@ sub gcd {
 	}
 }
 
-=head2 C<Bluto_algorithm>
-You will mostly not require to call this method, but directly gcd().
+=head2 Bluto_algorithm
+
+You will mostly not require to call this method, but directly C<gcd()>.
 Bluto's algorithm uses a brute force calculation used by mathematicians
 to get divisors and then GCD also called Primality Test. Bluto takes some
 spinaches stolen from Popeye and starts dividing m all the way through 2
 to m/2.
+
 =cut
+
 # We'll need some spinach
 sub Bluto_algorithm {
 	my @numbers = @_;
@@ -116,15 +134,18 @@ sub Bluto_algorithm {
         return max @repeats;
 }	
 
-=head2 c<Euclidean_algorithm>
-Euclid rocks. I have a very nice bird called the same in honor of him
-(the bird is supposed to be a very nice gray/blue Lark Sparrow, but I
-seriously doubt it, because of some special shape on the peek). As of
-now, this algorithm is only computed on two integers. From the Wikipedia
-entry: Given two natural numbers a and b: check if b is zero; if yes, a
+=head2 Euclidean_algorithm
+
+Euclid rocks. I have a very nice Budgerigar (L<http://en.wikipedia.org/wiki/Budgerigar>)
+called the same in honor of him (have to upload a pic of him).
+
+As of now, this algorithm is only computed on two integers. From the Wikipedia
+entry: I<Given two natural numbers a and b: check if b is zero; if yes, a
 is the gcd. If not, repeat the process using (respectively) b, and the
-remainder after dividing a by b. This is exactly what our method does.
+remainder after dividing a by b>. This is exactly what our method does.
+
 =cut
+
 # Euclid rocks!
 sub Euclidean_algorithm {
 	my @numbers = sort {$a < $b} @_;
@@ -143,11 +164,16 @@ sub Euclidean_algorithm {
 	}
 }
 
-=head2 c<is_divisor_of($a)>
+=head2 is_divisor_of
+
+  print "Yes, $p is divisor of $a...\n" if $number->is_divisor_of($a);
+
 Let's see if the number from the object is a divisor of $a, which means
 that the division $number/$a will return an integer (not necesarily a
 natural). If it does, it'll return 1; 0, otherwise.
+
 =cut
+
 sub is_divisor_of {
 	my($self, @args) = @_;
 	my @number = @{$self->{'numbers'}};
@@ -159,9 +185,15 @@ sub is_divisor_of {
 	$args[0] % $number[0] == 0 ? 1 : 0;
 }
 
-=head2 c<get_divisors>
-What are the divisors of the number brought by the object?
+=head2 get_divisors
+
+  my @divisors = $number->get_divisors;
+
+What are the divisors of the number brought by the object? This only
+includes the Natural numbers.
+
 =cut
+
 sub get_divisors {
 	my($self, @args) = @_;
 	my @number = @{$self->{numbers}};
@@ -177,12 +209,17 @@ sub get_divisors {
 	return @ret;
 }
 
+=head2 is_prime
+
+  print "$p is not prime!\n" unless $number->is_prime
+
+Returns 0 or 1 if the number from the object is prime or not,
+respectively. This method uses the, a bit slow, primality test.
+
+=cut
+
 # Primality testing!
 # This may be a bit slowly with _big_ numbers...
-=head2 c<is_prime>
-Returns 1 or 0 if the number from the object is true or false,
-respectively. This method uses the a bit slow primality test.
-=cut
 sub is_prime {
 	my($self, @args) = @_;
 
@@ -197,10 +234,15 @@ sub is_prime {
 	1;
 }
 
-=head2 c<are_coprimes>
+=head2 are_coprimes
+
+  print "They are coprimes because their GCD is 1!\n" if $numbers->are_coprimes;
+
 Are the numbers from the object coprimes (relatively primes)? This means,
 the GCD is 1; (a, b, c, ...) = 1. Returns 1 or 0.
+
 =cut
+
 sub are_coprimes {
 	my($self, @args) = @_;
 	my @numbers = @{$self->{numbers}};
@@ -215,25 +257,44 @@ sub are_coprimes {
 
 __END__
 
+=head1 DEPENDENCIES
+
+You will need L<List::Util> to get C<Bluto_algorithm> to work.
+
 =head1 TODO
 
 Lots of things are still left. A few examples are:
-* Admit any number of arguments from the object and returning
+
+=over
+
+=item *
+
+Admit any number of arguments from the object and returning
 evaluations for each.
-* Adding a method for proofs.
-* More, more number theory!
+
+=item *
+
+Adding a method for proofs.
+
+=item *
+
+More, more number theory!
+
+=back
 
 =head1 AUTHOR
 
-David Moreno Garza, E<lt>damog at ciencias.unam.mx<gt>
+David Moreno Garza, E<lt>damog@ciencias.unam.mxE<gt>
 
 =head1 THANKS
 
 Thanks go, as usual to the National Autonomous University of Mexico
-(UNAM, Universidad Nacional Autónoma de México) for providing such a
-beautiful career. Thanks also to Raquel for being my day-to-day
-inspiration and special thanks to the #perl dudes and Marco Antonio Manzo
-and Gunnarcito Wolf.
+(UNAM, Universidad Nacional AutÃ³noma de MÃ©xico, L<http://www.unam.mx/>)
+for providing such a beautiful career. Thanks also to Raquel
+(L<http://www.maggit.com.mx>) for being my day-to-day
+inspiration and special thanks to the I<#perl> at I<FreeNode> dudes and
+Marco Antonio Manzo (L<http://www.unixmonkeys.com/amnesiac/blog/>)
+and Gunnarcito Wolf (L<http://www.gwolf.org>).
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -243,6 +304,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
-The Do What The Fuck You Want To public license also applies.
+The Do What The Fuck You Want To public license also applies. It's
+really up to you.
 
 =cut
